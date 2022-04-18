@@ -7,8 +7,11 @@ authors = ["JulesBelveze <jules.belveze@hotmail.fr>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 transformers = "^4.18.0"
+torch = "^1.11.0"
+sentencepiece = "^0.1.96"
 
 [tool.poetry.dev-dependencies]
+pytest = "^7.1.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
