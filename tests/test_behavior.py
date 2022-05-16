@@ -8,16 +8,6 @@ from nlptest.types import BehaviorType, TaskType, Span
 
 
 @pytest.fixture
-def seq_classification_behavior():
-    return SequenceClassificationBehavior(test_type=BehaviorType.invariance, task_type=TaskType.sequence_classification)
-
-
-@pytest.fixture
-def span_classification_behavior():
-    return SpanClassificationBehavior(test_type=BehaviorType.invariance, task_type=TaskType.span_classification)
-
-
-@pytest.fixture
 def random_class():
     return random.randint(0, 10)
 
@@ -42,14 +32,19 @@ class TestSequenceClassificationBehavior:
     def test_run(self, text_sample, random_class):
         n_samples = 5
         behavior = SequenceClassificationBehavior(
+            name="Test sequence classification",
             test_type=BehaviorType.invariance,
             task_type=TaskType.sequence_classification,
             samples=[text_sample] * n_samples,
             labels=[random_class] * n_samples,
             predict_fn=self.predict_fn
-        ).run()
-        assert len(behavior) == n_samples
-        assert all([b.y_pred is not None for b in behavior])
+        )
+        behavior.run()
+        assert len(behavior.outputs) == n_samples
+        assert all([b.y_pred is not None for b in behavior.outputs])
+
+        with pytest.raises(ValueError):
+            behavior.run()
 
 
 class TestSpanClassificationBehavior:
@@ -57,16 +52,21 @@ class TestSpanClassificationBehavior:
 
     @staticmethod
     def predict_fn(list_text: List[str]):
-        return [[Span(start=0, end=10, label=1), Span(start=20, end=30, label=1)],] * len(list_text)
+        return [[Span(start=0, end=10, label=1), Span(start=20, end=30, label=1)], ] * len(list_text)
 
     def test_run(self, text_sample, random_span):
         n_samples = 5
         behavior = SpanClassificationBehavior(
+            name="Test span classification",
             test_type=BehaviorType.invariance,
             task_type=TaskType.sequence_classification,
             samples=[text_sample] * n_samples,
-            labels=[[random_span,] * 4] * n_samples,
+            labels=[[random_span, ] * 4] * n_samples,
             predict_fn=self.predict_fn
-        ).run()
-        assert len(behavior) == n_samples
-        assert all([b.y_pred is not None for b in behavior])
+        )
+        behavior.run()
+        assert len(behavior.outputs) == n_samples
+        assert all([b.y_pred is not None for b in behavior.outputs])
+
+        with pytest.raises(ValueError):
+            behavior.run()

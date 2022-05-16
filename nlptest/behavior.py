@@ -8,11 +8,12 @@ from .types import BehaviorType, TaskType, SequenceClassificationOutput, Span, S
 class Behavior(object):
     """"""
 
-    def __init__(self, test_type: BehaviorType, task_type: TaskType, samples: List[str], predict_fn: Callable,
-                 labels: Any, description: str = None):
+    def __init__(self, name: str, test_type: BehaviorType, task_type: TaskType, samples: List[str],
+                 predict_fn: Callable, labels: Any, description: str = None):
         if isinstance(labels, list):
             assert len(labels) == len(samples), \
                 "Provide either a single label or one label per sample"
+        self.name = name
         self.test_type = test_type
         self.task_type = task_type
         self.description = description
@@ -20,6 +21,9 @@ class Behavior(object):
         self.predict_fn = predict_fn
         self.samples = samples
         self.labels = labels
+
+        self._is_ran = False
+        self.outputs = []
 
     def run(self):
         """"""
@@ -29,22 +33,25 @@ class Behavior(object):
 class SequenceClassificationBehavior(Behavior):
     """"""
 
-    def __init__(self, test_type: BehaviorType, task_type: TaskType, samples: List[str], predict_fn: Callable,
-                 labels: Union[Union[str, int], List[Union[str, float]]], description: str = None):
-        super().__init__(test_type, task_type, samples, predict_fn, labels, description)
+    def __init__(self, name: str, test_type: BehaviorType, task_type: TaskType, samples: List[str],
+                 predict_fn: Callable, labels: Union[Union[str, int], List[Union[str, float]]],
+                 description: str = None):
+        super().__init__(name, test_type, task_type, samples, predict_fn, labels, description)
 
     @overrides
-    def run(self):
+    def run(self) -> None:
         """"""
+        if self._is_ran:
+            raise ValueError(f"This 'Behavior' has already been ran.")
         predictions = self.predict_fn(self.samples)
-        outputs = []
+
         for prediction, truth, text in zip(predictions, self.labels, self.samples):
             if isinstance(prediction, tuple) or isinstance(prediction, list):
                 y_pred, prob = prediction
             else:
                 y_pred = prediction
                 prob = None
-            outputs.append(
+            self.outputs.append(
                 SequenceClassificationOutput(
                     text=text,
                     y_pred=y_pred,
@@ -52,21 +59,27 @@ class SequenceClassificationBehavior(Behavior):
                     y=truth
                 )
             )
-        return outputs
+        self._is_ran = True
+
+    def __str__(self):
+        return f"<SequenceClassificationBehavior: name='{self.name}'>"
 
 
 class SpanClassificationBehavior(Behavior):
     """"""
 
-    def __init__(self, test_type: BehaviorType, task_type: TaskType, samples: List[str], predict_fn: Callable,
-                 labels: List[List[Optional[Span]]], description: str = None):
-        super().__init__(test_type, task_type, samples, predict_fn, labels, description)
+    def __init__(self, name: str, test_type: BehaviorType, task_type: TaskType, samples: List[str],
+                 predict_fn: Callable, labels: List[List[Optional[Span]]], description: str = None):
+        super().__init__(name, test_type, task_type, samples, predict_fn, labels, description)
 
     @overrides
-    def run(self):
+    def run(self) -> None:
+        """"""
+        if self._is_ran:
+            raise ValueError(f"This 'Behavior' has already been ran.")
+
         predictions = self.predict_fn(self.samples)
-        outputs = []
-        print(predictions)
+
         for predicted_spans, true_spans, text in zip(predictions, self.labels, self.samples):
             sample_spans = []
             if isinstance(predicted_spans[0], tuple):
@@ -82,14 +95,18 @@ class SpanClassificationBehavior(Behavior):
             else:
                 raise ValueError(
                     f"Expected span prediction to be of type 'tuple' or 'Span' got '{type(predicted_spans[0])}'")
-            outputs.append(
+            self.outputs.append(
                 SpanClassificationOutput(
                     text=text,
                     y_pred=sample_spans,
                     y=true_spans
                 )
             )
-        return outputs
+
+        self._is_ran = True
+
+    def __str__(self):
+        return f"<SpanClassificationBehavior: name='{self.name}'>"
 
 
 class DuplicateBehaviorError(Exception):

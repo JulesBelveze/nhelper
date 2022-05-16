@@ -63,3 +63,6 @@ class SequenceClassificationOutput(BaseModel):
 
 class TargetedSequenceClassificationOutput(SequenceClassificationOutput):
     target: str
+
+
+BehaviorOutput = Union[SpanClassificationOutput, SequenceClassificationOutput, TargetedSequenceClassificationOutput]
