@@ -1,3 +1,7 @@
+import os
+import pickle
+from copy import deepcopy
+from pathlib import Path
 from typing import List, Union, Callable, Optional, Any
 
 from overrides import overrides
@@ -25,9 +29,34 @@ class Behavior(object):
         self._is_ran = False
         self.outputs = []
 
-    def run(self):
+    def run(self) -> None:
         """"""
         raise NotImplementedError()
+
+    def reset(self) -> None:
+        self.outputs = []
+        self._is_ran = False
+
+    def to_file(self, path_folder: str) -> None:
+        """"""
+        file_name = "_".join(self.name.split())
+        path = Path(os.path.join(path_folder, f"{file_name}.pkl"))
+
+        self_copy = deepcopy(self)
+        self_copy.reset()
+        self_copy.predict_fn = None
+
+        with open(path, "wb") as writer:
+            pickle.dump(self_copy, writer)
+
+    @classmethod
+    def from_file(cls, path_to_file: str, predict_fn: Callable):
+        """"""
+        with open(path_to_file, "rb") as reader:
+            behavior = pickle.load(reader)
+
+        behavior.predict_fn = predict_fn
+        return behavior
 
 
 class SequenceClassificationBehavior(Behavior):
