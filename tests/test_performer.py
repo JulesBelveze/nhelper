@@ -35,9 +35,11 @@ class TestPerformer:
     def test_metrics(self, seq_classification_behavior, seq_classification_behavior2):
         """"""
         performer = SequenceClassificationPerformer(
-            behaviors=[seq_classification_behavior, seq_classification_behavior2],
-            labels=[1, 2]
+            labels=[1, 2],
+            metric_type="weighted"
         )
+        performer.fit([seq_classification_behavior, seq_classification_behavior2])
+
         assert performer.result[BehaviorType.directional.value] == \
                performer.result["Test sequence classification 2"] == 0.5
         assert performer.result[BehaviorType.invariance.value] == \

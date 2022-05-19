@@ -4,7 +4,14 @@ from transformers import pipeline
 
 
 class Generator(object):
+    """Helper object to create syntactical samples"""
+
     def __init__(self, fill_mask_model_name: str = None, translator_model_name: str = None):
+        """
+
+        :param fill_mask_model_name:
+        :param translator_model_name:
+        """
         self.fill_mask_model_name = fill_mask_model_name
         self.translator_model_name = translator_model_name
 
@@ -13,7 +20,14 @@ class Generator(object):
                                             model=translator_model_name) if translator_model_name else None
 
     def fill_mask(self, template: str, top_k: int):
-        """"""
+        """
+        Creates syntactical data by masking some words in a sentence and predicting
+        which words should replace those masks.
+
+        :param template: masked text that will be used for prediction
+        :param top_k: amount of syntactical texts to generate
+        :return:
+        """
         if self.fill_mask_model_name is None:
             raise ValueError("The Generator has not been instantiated with a 'fill_mask_model_name'.")
 
@@ -23,7 +37,11 @@ class Generator(object):
         return [pred["sequence"] for pred in unmasked]
 
     def translate(self, template: str):
-        """"""
+        """
+
+        :param template:
+        :return:
+        """
         if self.translator_model_name is None:
             raise ValueError("The Generator has not been instantiated with a 'translator_model_name'.")
 

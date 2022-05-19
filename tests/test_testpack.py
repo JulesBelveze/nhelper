@@ -1,6 +1,9 @@
+import copy
+
 import pytest
 
 from nlptest.behavior import SequenceClassificationBehavior, DuplicateBehaviorError
+from nlptest.performers import SequenceClassificationPerformer
 from nlptest.testpack import TestPack
 from nlptest.types import BehaviorType, TaskType
 
@@ -29,6 +32,11 @@ def seq_classification_behavior2():
     )
 
 
+@pytest.fixture
+def performer():
+    return SequenceClassificationPerformer(labels=[1, 2])
+
+
 class TestTestPack:
     """"""
 
@@ -44,18 +52,18 @@ class TestTestPack:
 
         assert len(testpack.behaviors) == 1
 
-    def test_run(self, seq_classification_behavior, seq_classification_behavior2):
+    def test_run(self, seq_classification_behavior, seq_classification_behavior2, performer):
         """"""
-        testpack = TestPack()
+        testpack = TestPack(performer=performer)
         testpack.add([seq_classification_behavior, seq_classification_behavior2])
 
         testpack.run()
         with pytest.raises(ValueError):
             testpack.run()
 
-    def test_save_and_load(self, seq_classification_behavior, seq_classification_behavior2):
+    def test_save_and_load(self, seq_classification_behavior, seq_classification_behavior2, performer):
         """"""
-        testpack = TestPack()
+        testpack = TestPack(performer=performer)
         testpack.add([seq_classification_behavior, seq_classification_behavior2])
         testpack.run()
         outputs1 = testpack.outputs
@@ -63,7 +71,8 @@ class TestTestPack:
 
         testpack2 = TestPack.from_file(
             "/tmp/test",
-            lambda x: [1, ] * len(x)
+            lambda x: [1, ] * len(x),
+            SequenceClassificationPerformer(labels=[1, 2])
         )
         testpack2.run()
         outputs2 = testpack2.outputs
