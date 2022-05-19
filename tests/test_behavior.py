@@ -46,6 +46,30 @@ class TestSequenceClassificationBehavior:
         with pytest.raises(ValueError):
             behavior.run()
 
+    def test_save_and_load(self, text_sample, random_class):
+        """"""
+        n_samples = 5
+        behavior = SequenceClassificationBehavior(
+            name="Test sequence classification",
+            test_type=BehaviorType.invariance,
+            task_type=TaskType.sequence_classification,
+            samples=[text_sample] * n_samples,
+            labels=[random_class] * n_samples,
+            predict_fn=self.predict_fn
+        )
+        behavior.run()
+        behavior.to_file("tmp_data/")
+        output0 = behavior.outputs
+
+        new_behavior = SequenceClassificationBehavior.from_file(
+            "tmp_data/Test_sequence_classification.pkl",
+            self.predict_fn
+        )
+        new_behavior.run()
+        output1 = behavior.outputs
+
+        assert output0 == output1
+
 
 class TestSpanClassificationBehavior:
     """"""
@@ -59,7 +83,7 @@ class TestSpanClassificationBehavior:
         behavior = SpanClassificationBehavior(
             name="Test span classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.sequence_classification,
+            task_type=TaskType.span_classification,
             samples=[text_sample] * n_samples,
             labels=[[random_span, ] * 4] * n_samples,
             predict_fn=self.predict_fn
@@ -70,3 +94,27 @@ class TestSpanClassificationBehavior:
 
         with pytest.raises(ValueError):
             behavior.run()
+
+    def test_save_and_load(self, text_sample, random_span):
+        """"""
+        n_samples = 5
+        behavior = SpanClassificationBehavior(
+            name="Test span classification",
+            test_type=BehaviorType.invariance,
+            task_type=TaskType.span_classification,
+            samples=[text_sample] * n_samples,
+            labels=[[random_span, ] * 4] * n_samples,
+            predict_fn=self.predict_fn
+        )
+        behavior.run()
+        behavior.to_file("tmp_data/")
+        output0 = behavior.outputs
+
+        new_behavior = SpanClassificationBehavior.from_file(
+            "tmp_data/Test_span_classification.pkl",
+            self.predict_fn
+        )
+        new_behavior.run()
+        output1 = behavior.outputs
+
+        assert output0 == output1
