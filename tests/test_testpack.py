@@ -13,7 +13,7 @@ def seq_classification_behavior():
         task_type=TaskType.sequence_classification,
         samples=["TEST"],
         labels=[1],
-        predict_fn=lambda x: 1
+        predict_fn=lambda x: [1, ] * len(x)
     )
 
 
@@ -25,7 +25,7 @@ def seq_classification_behavior2():
         task_type=TaskType.sequence_classification,
         samples=["TEST"],
         labels=[2],
-        predict_fn=lambda x: 1
+        predict_fn=lambda x: [1, ] * len(x)
     )
 
 
@@ -52,3 +52,20 @@ class TestTestPack:
         testpack.run()
         with pytest.raises(ValueError):
             testpack.run()
+
+    def test_save_and_load(self, seq_classification_behavior, seq_classification_behavior2):
+        """"""
+        testpack = TestPack()
+        testpack.add([seq_classification_behavior, seq_classification_behavior2])
+        testpack.run()
+        outputs1 = testpack.outputs
+        testpack.to_file("/tmp/test")
+
+        testpack2 = TestPack.from_file(
+            "/tmp/test",
+            lambda x: [1, ] * len(x)
+        )
+        testpack2.run()
+        outputs2 = testpack2.outputs
+
+        assert outputs1 == outputs2
