@@ -10,10 +10,19 @@ from .types import BehaviorType, TaskType, SequenceClassificationOutput, Span, S
 
 
 class Behavior(object):
-    """"""
+    """Model's Behavior to be tested"""
 
     def __init__(self, name: str, test_type: BehaviorType, task_type: TaskType, samples: List[str],
                  predict_fn: Callable, labels: Any, description: str = None):
+        """
+        :param name: behavior name (used for identification)
+        :param test_type: type of test
+        :param task_type: type of task
+        :param samples: list of samples to test
+        :param predict_fn: function used for prediction
+        :param labels: set of labels
+        :param description: behavior's description
+        """
         if isinstance(labels, list):
             assert len(labels) == len(samples), \
                 "Provide either a single label or one label per sample"
@@ -34,11 +43,12 @@ class Behavior(object):
         raise NotImplementedError()
 
     def reset(self) -> None:
+        """"""
         self.outputs = []
         self._is_ran = False
 
     def to_file(self, path_folder: str) -> None:
-        """"""
+        """Save the Behavior as a pickle object"""
         file_name = "_".join(self.name.split())
         path = Path(os.path.join(path_folder, f"{file_name}.pkl"))
 
@@ -51,7 +61,7 @@ class Behavior(object):
 
     @classmethod
     def from_file(cls, path_to_file: str, predict_fn: Callable):
-        """"""
+        """Loads a Behavior from a pickle file"""
         with open(path_to_file, "rb") as reader:
             behavior = pickle.load(reader)
 
@@ -65,6 +75,16 @@ class SequenceClassificationBehavior(Behavior):
     def __init__(self, name: str, test_type: BehaviorType, task_type: TaskType, samples: List[str],
                  predict_fn: Callable, labels: Union[Union[str, int], List[Union[str, float]]],
                  description: str = None):
+        """
+
+        :param name:
+        :param test_type:
+        :param task_type:
+        :param samples:
+        :param predict_fn:
+        :param labels:
+        :param description:
+        """
         super().__init__(name, test_type, task_type, samples, predict_fn, labels, description)
 
     @overrides
@@ -99,6 +119,16 @@ class SpanClassificationBehavior(Behavior):
 
     def __init__(self, name: str, test_type: BehaviorType, task_type: TaskType, samples: List[str],
                  predict_fn: Callable, labels: List[List[Optional[Span]]], description: str = None):
+        """
+
+        :param name:
+        :param test_type:
+        :param task_type:
+        :param samples:
+        :param predict_fn:
+        :param labels:
+        :param description:
+        """
         super().__init__(name, test_type, task_type, samples, predict_fn, labels, description)
 
     @overrides
@@ -143,12 +173,16 @@ class DuplicateBehaviorError(Exception):
 
 
 class BehaviorSet(set):
+    """"""
+
     def add(self, value: Behavior):
+        """"""
         if value in self:
             raise DuplicateBehaviorError(f"Behavior '{value}' already present in set.")
         super().add(value)
 
     def update(self, values: List[Behavior]):
+        """"""
         error_values = []
         for value in values:
             if value in self:

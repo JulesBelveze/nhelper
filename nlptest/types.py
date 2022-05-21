@@ -5,18 +5,21 @@ from pydantic import BaseModel
 
 
 class BehaviorType(str, Enum):
+    """"""
     invariance = "invariance"
     directional = "directional"
     minimum_functionality = "minimum functionality"
 
 
 class TaskType(str, Enum):
+    """"""
     sequence_classification = "sequence_classification"
     target_sequence_classification = "targeted_sequence_classification"
     span_classification = "span_classification"
 
 
 class Span(BaseModel):
+    """Representation of a 'Span' object for span classification tasks"""
     start: int
     end: int
     label: Union[str, int]
@@ -38,6 +41,7 @@ class Span(BaseModel):
 
 
 class SpanClassificationOutput(BaseModel):
+    """Output of a span classification model"""
     text: str
     y_pred: List[Span]
     y: List[Span]
@@ -51,6 +55,7 @@ class SpanClassificationOutput(BaseModel):
 
 
 class SequenceClassificationOutput(BaseModel):
+    """Output of a sequence classification model"""
     text: str
     y_pred: Union[str, int]
     y_pred_prob: float = None
@@ -62,6 +67,7 @@ class SequenceClassificationOutput(BaseModel):
 
 
 class TargetedSequenceClassificationOutput(SequenceClassificationOutput):
+    """Output of a targeted sequence classification model"""
     target: str
 
 
