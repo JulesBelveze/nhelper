@@ -71,4 +71,21 @@ class TargetedSequenceClassificationOutput(SequenceClassificationOutput):
     target: str
 
 
-BehaviorOutput = Union[SpanClassificationOutput, SequenceClassificationOutput, TargetedSequenceClassificationOutput]
+class MultiLabelSequenceClassificationOutput(BaseModel):
+    """"""
+    text: str
+    y_pred: List[int]
+    y_pred_prob: List[float] = None
+    y: List[int]
+
+    @property
+    def success(self):
+        return self.y == self.y_pred
+
+
+BehaviorOutput = Union[
+    SpanClassificationOutput,
+    SequenceClassificationOutput,
+    TargetedSequenceClassificationOutput,
+    MultiLabelSequenceClassificationOutput
+]
