@@ -7,7 +7,7 @@ from typing import List, Union, Callable, Optional, Any
 from overrides import overrides
 
 from .types import BehaviorType, TaskType, SequenceClassificationOutput, Span, SpanClassificationOutput, \
-    MultiLabelSequenceClassificationOutput
+    MultiLabelSequenceClassificationOutput, Token, TokenClassificationOutput
 
 
 class Behavior(object):
@@ -211,6 +211,62 @@ class SpanClassificationBehavior(Behavior):
 
     def __str__(self):
         return f"<SpanClassificationBehavior: name='{self.name}'>"
+
+
+class TokenClassificationBehavior(Behavior):
+    """"""
+
+    def __init__(self, name: str, test_type: BehaviorType, task_type: TaskType, samples: List[str],
+                 predict_fn: Callable, labels: List[Union[List[Token], List[int]]], description: str = None):
+        """
+
+        :param name:
+        :param test_type:
+        :param task_type:
+        :param samples:
+        :param predict_fn:
+        :param labels:
+        :param description:
+        """
+        super().__init__(name, test_type, task_type, samples, predict_fn, labels, description)
+
+    @overrides
+    def run(self) -> None:
+        """"""
+        if self._is_ran:
+            raise ValueError(f"This 'Behavior' has already been ran.")
+
+        predictions = self.predict_fn(self.samples)
+
+        for predicted_tokens, true_tokens, text in zip(predictions, self.labels, self.samples):
+            if isinstance(predicted_tokens[0], Token):
+                sample_tokens_pred = predicted_tokens
+            elif isinstance(predicted_tokens[0], int):
+                sample_tokens_pred = [Token(pos=i, label=l) for i, l in enumerate(predicted_tokens)]
+            else:
+                raise ValueError(
+                    f"Expected token prediction to be of type 'int' or 'Token' got '{type(predicted_tokens[0])}'")
+
+            if isinstance(true_tokens[0], Token):
+                sample_tokens = true_tokens
+            elif isinstance(true_tokens[0], int):
+                sample_tokens = [Token(pos=i, label=l) for i, l in enumerate(true_tokens)]
+            else:
+                raise ValueError(
+                    f"Expected token prediction to be of type 'int' or 'Token' got '{type(true_tokens[0])}'")
+
+            self.outputs.append(
+                TokenClassificationOutput(
+                    text=text,
+                    y_pred=sample_tokens_pred,
+                    y=sample_tokens
+                )
+            )
+
+        self._is_ran = True
+
+    def __str__(self):
+        return f"<TokenClassificationBehavior: name='{self.name}'>"
 
 
 class DuplicateBehaviorError(Exception):

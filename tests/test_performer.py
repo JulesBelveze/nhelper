@@ -1,6 +1,6 @@
-from nlptest.behavior import SequenceClassificationBehavior, SpanClassificationBehavior
+from nlptest.behavior import SequenceClassificationBehavior, SpanClassificationBehavior, TokenClassificationBehavior
 from nlptest.performers import Performer
-from nlptest.types import BehaviorType, TaskType, Span
+from nlptest.types import BehaviorType, TaskType, Span, Token
 
 
 class TestPerformer:
@@ -68,4 +68,43 @@ class TestPerformer:
                performer.result["Test span classification 2"] == 0.0
         assert performer.result[BehaviorType.invariance.value] == \
                performer.result["Test span classification"] == 1.0
+        assert performer.result["total"] == 1 / 3
+
+    def test_metrics_token_classification(self):
+        """"""
+        token_classification_behavior = TokenClassificationBehavior(
+            name="Test token classification",
+            test_type=BehaviorType.invariance,
+            task_type=TaskType.token_classification,
+            samples=["This is a test"],
+            labels=[[Token(pos=0, label=0), Token(pos=1, label=0), Token(pos=2, label=0), Token(pos=3, label=1)]],
+            predict_fn=lambda x: [[Token(pos=0, label=1), Token(pos=1, label=0), Token(pos=2, label=0),
+                                   Token(pos=3, label=0)], ]
+        )
+        token_classification_behavior2 = TokenClassificationBehavior(
+            name="Test token classification 2",
+            test_type=BehaviorType.directional,
+            task_type=TaskType.token_classification,
+            samples=["This is a test", "This is a 2nd test !"],
+            labels=[
+                [Token(pos=0, label=0), Token(pos=1, label=0), Token(pos=2, label=0), Token(pos=3, label=1)],
+                [Token(pos=0, label=0), Token(pos=1, label=1), Token(pos=2, label=1), Token(pos=3, label=1),
+                 Token(pos=4, label=1)]
+            ],
+            predict_fn=lambda x: [
+                [Token(pos=0, label=1), Token(pos=1, label=0), Token(pos=2, label=0), Token(pos=3, label=1)],
+                [Token(pos=0, label=0), Token(pos=1, label=1), Token(pos=2, label=1), Token(pos=3, label=1),
+                 Token(pos=4, label=1)]
+            ]
+        )
+        performer = Performer(
+            labels=[0, 1],
+            metric_type="weighted"
+        )
+        performer.fit([token_classification_behavior, token_classification_behavior2])
+
+        assert performer.result[BehaviorType.directional.value] == \
+               performer.result["Test token classification 2"] == 0.5
+        assert performer.result[BehaviorType.invariance.value] == \
+               performer.result["Test token classification"] == 0
         assert performer.result["total"] == 1 / 3

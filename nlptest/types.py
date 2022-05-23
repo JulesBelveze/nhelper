@@ -16,6 +16,7 @@ class TaskType(str, Enum):
     sequence_classification = "sequence_classification"
     target_sequence_classification = "targeted_sequence_classification"
     span_classification = "span_classification"
+    token_classification = "token_classification"
 
 
 class Span(BaseModel):
@@ -83,9 +84,29 @@ class MultiLabelSequenceClassificationOutput(BaseModel):
         return self.y == self.y_pred
 
 
+class Token(BaseModel):
+    """"""
+    pos: int
+    prob: float = None
+    label: int
+
+
+class TokenClassificationOutput(BaseModel):
+    """"""
+    text: str
+    y_pred: Union[List[Token], List[int]]
+    y_pred_prob: List[float] = None
+    y: Union[List[Token], List[int]]
+
+    @property
+    def success(self):
+        return self.y == self.y_pred
+
+
 BehaviorOutput = Union[
     SpanClassificationOutput,
     SequenceClassificationOutput,
     TargetedSequenceClassificationOutput,
-    MultiLabelSequenceClassificationOutput
+    MultiLabelSequenceClassificationOutput,
+    TokenClassificationOutput
 ]
