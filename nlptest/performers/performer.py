@@ -6,10 +6,10 @@ from typing import Union, List
 import numpy as np
 from tabulate import tabulate
 
-from nlptest.behavior import SequenceClassificationBehavior
+from nlptest.behavior import Behavior
 
 
-class SequenceClassificationPerformer(object):
+class Performer(object):
     """Object use to compute a performance summary of a list of Behaviors."""
 
     def __init__(self, labels: List[Union[int, str]], metric_type: str = "weighted"):
@@ -24,7 +24,7 @@ class SequenceClassificationPerformer(object):
         self.eps = 1e-8
         self._is_fitted = False
 
-    def fit(self, behaviors: List[SequenceClassificationBehavior]) -> None:
+    def fit(self, behaviors: List[Behavior]) -> None:
         """"""
         if self._is_fitted:
             raise ValueError("Performer is already fitted.")
