@@ -1,4 +1,4 @@
 from typing import Union
-from .sequence_performer import SequenceClassificationPerformer
+from .performer import Performer
 
-PerformerType = Union[SequenceClassificationPerformer]
+PerformerType = Union[Performer]

@@ -3,8 +3,9 @@ from typing import List
 
 import pytest
 
-from nlptest.behavior import SequenceClassificationBehavior, SpanClassificationBehavior
-from nlptest.types import BehaviorType, TaskType, Span
+from nlptest.behavior import SequenceClassificationBehavior, SpanClassificationBehavior, \
+    MultiLabelSequenceClassificationBehavior, TokenClassificationBehavior
+from nlptest.types import BehaviorType, TaskType, Span, Token
 
 
 @pytest.fixture
@@ -71,6 +72,58 @@ class TestSequenceClassificationBehavior:
         assert output0 == output1
 
 
+class TestMultiLabelSequenceClassificationBehavior:
+    """"""
+    n_labels = 4
+
+    def predict_fn(self, list_text: List[str]):
+        labels = [random.randint(0, 1), ] * self.n_labels
+        return [labels, ] * len(list_text)
+
+    def test_run(self, text_sample):
+        n_samples = 5
+
+        behavior = MultiLabelSequenceClassificationBehavior(
+            name="Test multi label sequence classification",
+            test_type=BehaviorType.invariance,
+            task_type=TaskType.sequence_classification,
+            samples=[text_sample] * n_samples,
+            labels=[[1, ] * self.n_labels] * n_samples,
+            predict_fn=self.predict_fn
+        )
+        behavior.run()
+        assert len(behavior.outputs) == n_samples
+        assert all([b.y_pred is not None for b in behavior.outputs])
+
+        with pytest.raises(ValueError):
+            behavior.run()
+
+    def test_save_and_load(self, text_sample):
+        """"""
+        n_samples = 5
+
+        behavior = MultiLabelSequenceClassificationBehavior(
+            name="Test multi label sequence classification",
+            test_type=BehaviorType.invariance,
+            task_type=TaskType.sequence_classification,
+            samples=[text_sample] * n_samples,
+            labels=[[1, ] * self.n_labels] * n_samples,
+            predict_fn=self.predict_fn
+        )
+        behavior.run()
+        behavior.to_file("tmp_data/")
+        output0 = behavior.outputs
+
+        new_behavior = MultiLabelSequenceClassificationBehavior.from_file(
+            "tmp_data/Test_multi_label_sequence_classification.pkl",
+            self.predict_fn
+        )
+        new_behavior.run()
+        output1 = behavior.outputs
+
+        assert output0 == output1
+
+
 class TestSpanClassificationBehavior:
     """"""
 
@@ -112,6 +165,66 @@ class TestSpanClassificationBehavior:
 
         new_behavior = SpanClassificationBehavior.from_file(
             "tmp_data/Test_span_classification.pkl",
+            self.predict_fn
+        )
+        new_behavior.run()
+        output1 = behavior.outputs
+
+        assert output0 == output1
+
+
+class TestTokenClassificationBehavior:
+    """"""
+
+    @staticmethod
+    def predict_fn(list_text: List[str]):
+        preds = []
+        for text in list_text:
+            tokens = text.split()
+            y = [Token(pos=i, label=i % 2) for i in range(len(tokens))]
+            preds.append(y)
+        return preds
+
+    def test_run(self, text_sample):
+        n_samples = 5
+        tokens = text_sample.split()
+        labels = [[Token(pos=i, label=i % 3) for i in range(len(tokens))], ] * n_samples
+
+        behavior = TokenClassificationBehavior(
+            name="Test token classification",
+            test_type=BehaviorType.invariance,
+            task_type=TaskType.token_classification,
+            samples=[text_sample] * n_samples,
+            labels=labels,
+            predict_fn=self.predict_fn
+        )
+        behavior.run()
+        assert len(behavior.outputs) == n_samples
+        assert all([b.y_pred is not None for b in behavior.outputs])
+
+        with pytest.raises(ValueError):
+            behavior.run()
+
+    def test_save_and_load(self, text_sample):
+        """"""
+        n_samples = 5
+        tokens = text_sample.split()
+        labels = [[Token(pos=i, label=i % 3) for i in range(len(tokens))], ] * n_samples
+
+        behavior = TokenClassificationBehavior(
+            name="Test token classification",
+            test_type=BehaviorType.invariance,
+            task_type=TaskType.token_classification,
+            samples=[text_sample] * n_samples,
+            labels=labels,
+            predict_fn=self.predict_fn
+        )
+        behavior.run()
+        behavior.to_file("tmp_data/")
+        output0 = behavior.outputs
+
+        new_behavior = TokenClassificationBehavior.from_file(
+            "tmp_data/Test_token_classification.pkl",
             self.predict_fn
         )
         new_behavior.run()
