@@ -24,6 +24,7 @@ class Span(BaseModel):
     start: int
     end: int
     label: Union[str, int]
+    text: str = None
     prob: float = None
 
     def __str__(self):

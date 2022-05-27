@@ -12,13 +12,10 @@ from nlptest.behavior import Behavior
 class Performer(object):
     """Object use to compute a performance summary of a list of Behaviors."""
 
-    def __init__(self, labels: List[Union[int, str]], metric_type: str = "weighted"):
+    def __init__(self, metric_type: str = "weighted"):
         """
-
-        :param labels: set of possible labels
         :param metric_type: aggregation type
         """
-        self.labels = labels
         self.metric_type = metric_type
 
         self.eps = 1e-8
@@ -54,4 +51,4 @@ class Performer(object):
 
     def tabulate_result(self):
         """Prettify results"""
-        return tabulate({key: list(value) for key, value in self.result.items()}, headers="keys")
+        return tabulate({key: [value] for key, value in self.result.items()}, headers="keys")
