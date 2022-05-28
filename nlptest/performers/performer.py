@@ -51,4 +51,4 @@ class Performer(object):
 
     def tabulate_result(self):
         """Prettify results"""
-        return tabulate({key: [value] for key, value in self.result.items()}, headers="keys")
+        return tabulate([[key, value] for key, value in self.result.items()])
