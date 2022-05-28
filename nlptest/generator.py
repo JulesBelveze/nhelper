@@ -1,4 +1,5 @@
-from typing import List
+from itertools import product
+from typing import List, Union, Tuple
 
 from transformers import pipeline
 
@@ -19,12 +20,12 @@ class Generator(object):
         self.translator_pipeline = pipeline("text2text-generation",
                                             model=translator_model_name) if translator_model_name else None
 
-    def fill_mask(self, template: str, top_k: int):
+    def fill_mask(self, template: Union[str, List[str]], top_k: int) -> List[str]:
         """
         Creates syntactical data by masking some words in a sentence and predicting
         which words should replace those masks.
 
-        :param template: masked text that will be used for prediction
+        :param template: masked text(s) that will be used for prediction
         :param top_k: amount of syntactical texts to generate
         :return:
         """
@@ -36,7 +37,7 @@ class Generator(object):
         unmasked = self.fill_pipeline(template, top_k=top_k)
         return [pred["sequence"] for pred in unmasked]
 
-    def translate(self, template: str):
+    def translate(self, template: Union[str, List[str]]) -> List[str]:
         """
 
         :param template:
@@ -46,18 +47,37 @@ class Generator(object):
             raise ValueError("The Generator has not been instantiated with a 'translator_model_name'.")
 
         translation = self.translator_pipeline(template)
-        return translation[0]["generated_text"]
+        return [elt["generated_text"] for elt in translation]
 
     @staticmethod
-    def generate(template: str, **kwargs) -> List[str]:
+    def generate(templates: Union[str, List[str]], generate_all: bool = False, return_pos: bool = False, **kwargs) -> \
+            Union[List[str], Tuple[List[str], List[List[Tuple]]]]:
         """"""
-        assert max(map(len, kwargs.values())) == min(map(len, kwargs.values())), \
-            "Please provide the same number number of alternatives for all keywords."
+        if isinstance(templates, str):
+            templates = [templates]
 
-        flatten_kwargs = [dict(zip(kwargs, t)) for t in zip(*kwargs.values())]
+        assert max(map(len, kwargs.values())) == min(map(len, kwargs.values())) or generate_all, \
+            "Please provide the same number number of alternatives for all keywords or set 'generate_all' to True."
 
-        generations = []
-        for combination in flatten_kwargs:
-            generations.append(template.format(**combination))
+        if generate_all:
+            combined_kwargs = [dict(zip(kwargs, t)) for t in product(*kwargs.values())]
+        else:
+            combined_kwargs = [dict(zip(kwargs, t)) for t in zip(*kwargs.values())]
+
+        generations, all_positions = [], []
+        for combination in combined_kwargs:
+            for template in templates:
+                text = template.format(**combination)
+                generations.append(text)
+
+                if return_pos:
+                    positions = []
+                    for label, word in combination.items():
+                        start = text.find(word)
+                        positions.append((start, start + len(word), label, word))
+                    all_positions.append(positions)
+
+        if return_pos:
+            return generations, all_positions
 
         return generations

@@ -50,6 +50,8 @@ class Behavior(object):
 
     def to_file(self, path_folder: str) -> None:
         """Save the Behavior as a pickle object"""
+        Path(path_folder).mkdir(parents=True, exist_ok=True)
+
         file_name = "_".join(self.name.split())
         path = Path(os.path.join(path_folder, f"{file_name}.pkl"))
 
@@ -186,7 +188,7 @@ class SpanClassificationBehavior(Behavior):
 
         for predicted_spans, true_spans, text in zip(predictions, self.labels, self.samples):
             sample_spans = []
-            if isinstance(predicted_spans[0], tuple):
+            if len(predicted_spans) > 0 and isinstance(predicted_spans[0], tuple):
                 for span in predicted_spans:
                     if len(span) >= 3:
                         span = Span(**{key: span[i] for i, key in enumerate(Span.__fields__.keys())})
@@ -194,9 +196,9 @@ class SpanClassificationBehavior(Behavior):
                         raise ValueError(
                             f"Output of type 'Span' requires at least 3 elements, got {len(span)} instead.")
                     sample_spans.append(span)
-            elif isinstance(predicted_spans[0], Span):
+            elif len(predicted_spans) > 0 and isinstance(predicted_spans[0], Span):
                 sample_spans = predicted_spans
-            else:
+            elif len(predicted_spans) > 0:
                 raise ValueError(
                     f"Expected span prediction to be of type 'tuple' or 'Span' got '{type(predicted_spans[0])}'")
             self.outputs.append(

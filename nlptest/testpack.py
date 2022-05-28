@@ -20,6 +20,12 @@ class TestPack(object):
         self.outputs = []
         self._is_ran = False
 
+    @property
+    def result(self):
+        if not self._is_ran:
+            return None
+        return self.performer.result
+
     def add(self, new_behaviors: Union[Behavior, List[Behavior]]) -> None:
         """
         Adds new Behavior(s) to the current test suite
