@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "nlptest"
+name = "NLPtest"
 version = "0.1.0"
 description = "🧪 Behavioral tests for NLP models 🧪"
 authors = ["JulesBelveze <jules.belveze@hotmail.fr>"]
 
-license = { file = "LICENSE" }
+license = "LICENSE"
 homepage = "https://github.com/JulesBelveze/nlptest"
 repository = "https://github.com/JulesBelveze/nlptest"
 readme = "README.md"
