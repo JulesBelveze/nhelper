@@ -1,8 +1,11 @@
 [tool.poetry]
 name = "nlptest"
 version = "0.1.0"
-description = ""
+description = "🧪 Behavioral tests for NLP models 🧪"
 authors = ["JulesBelveze <jules.belveze@hotmail.fr>"]
+repository = "https://github.com/JulesBelveze/nlptest"
+readme = "README.md"
+keywords = ["nlp", "behavioral testing", "test"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
