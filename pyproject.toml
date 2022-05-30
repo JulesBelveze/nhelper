@@ -3,9 +3,21 @@ name = "nlptest"
 version = "0.1.0"
 description = "🧪 Behavioral tests for NLP models 🧪"
 authors = ["JulesBelveze <jules.belveze@hotmail.fr>"]
+
+license = { file = "LICENSE" }
+homepage = "https://github.com/JulesBelveze/nlptest"
 repository = "https://github.com/JulesBelveze/nlptest"
 readme = "README.md"
 keywords = ["nlp", "behavioral testing", "test"]
+classifiers = [
+    "Topic :: Software Development :: Testing",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing"
+]
+include = [
+    "LICENSE",
+    "figures/"
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"
