@@ -33,6 +33,7 @@ class TestSequenceClassificationBehavior:
     def test_run(self, text_sample, random_class):
         n_samples = 5
         behavior = SequenceClassificationBehavior(
+            capability="Capability 1",
             name="Test sequence classification",
             test_type=BehaviorType.invariance,
             samples=[text_sample] * n_samples,
@@ -50,6 +51,7 @@ class TestSequenceClassificationBehavior:
         """"""
         n_samples = 5
         behavior = SequenceClassificationBehavior(
+            capability="Capability 2",
             name="Test sequence classification",
             test_type=BehaviorType.invariance,
             samples=[text_sample] * n_samples,
@@ -82,6 +84,7 @@ class TestMultiLabelSequenceClassificationBehavior:
         n_samples = 5
 
         behavior = MultiLabelSequenceClassificationBehavior(
+            capability="Capability 1",
             name="Test multi label sequence classification",
             test_type=BehaviorType.invariance,
             samples=[text_sample] * n_samples,
@@ -100,6 +103,7 @@ class TestMultiLabelSequenceClassificationBehavior:
         n_samples = 5
 
         behavior = MultiLabelSequenceClassificationBehavior(
+            capability="Capability 2",
             name="Test multi label sequence classification",
             test_type=BehaviorType.invariance,
             samples=[text_sample] * n_samples,
@@ -130,6 +134,7 @@ class TestSpanClassificationBehavior:
     def test_run(self, text_sample, random_span):
         n_samples = 5
         behavior = SpanClassificationBehavior(
+            capability="Capability 1",
             name="Test span classification",
             test_type=BehaviorType.invariance,
             samples=[text_sample] * n_samples,
@@ -147,6 +152,7 @@ class TestSpanClassificationBehavior:
         """"""
         n_samples = 5
         behavior = SpanClassificationBehavior(
+            capability="Capability 2",
             name="Test span classification",
             test_type=BehaviorType.invariance,
             samples=[text_sample] * n_samples,
@@ -185,6 +191,7 @@ class TestTokenClassificationBehavior:
         labels = [[Token(pos=i, label=i % 3) for i in range(len(tokens))], ] * n_samples
 
         behavior = TokenClassificationBehavior(
+            capability="Capability 1",
             name="Test token classification",
             test_type=BehaviorType.invariance,
             samples=[text_sample] * n_samples,
@@ -205,6 +212,7 @@ class TestTokenClassificationBehavior:
         labels = [[Token(pos=i, label=i % 3) for i in range(len(tokens))], ] * n_samples
 
         behavior = TokenClassificationBehavior(
+            capability="Capability 2",
             name="Test token classification",
             test_type=BehaviorType.invariance,
             samples=[text_sample] * n_samples,

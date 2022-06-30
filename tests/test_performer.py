@@ -9,6 +9,7 @@ class TestPerformer:
     def test_metrics_seq_classification(self):
         """"""
         seq_classification_behavior = SequenceClassificationBehavior(
+            capability="Capability 1",
             name="Test sequence classification",
             test_type=BehaviorType.invariance,
             samples=["This is a test"],
@@ -16,6 +17,7 @@ class TestPerformer:
             predict_fn=lambda x: [1] * len(x)
         )
         seq_classification_behavior2 = SequenceClassificationBehavior(
+            capability="Capability 2",
             name="Test sequence classification 2",
             test_type=BehaviorType.directional,
             samples=["This is a test", "This is a 2nd test"],
@@ -35,8 +37,8 @@ class TestPerformer:
 
     def test_metrics_span_classification(self):
         """"""
-
         span_classification_behavior = SpanClassificationBehavior(
+            capability="Capability 1",
             name="Test span classification",
             test_type=BehaviorType.invariance,
             samples=["This is a test"],
@@ -44,6 +46,7 @@ class TestPerformer:
             predict_fn=lambda x: [[Span(start=0, end=10, label=1)], ] * len(x)
         )
         span_classification_behavior2 = SpanClassificationBehavior(
+            capability="Capability 2",
             name="Test span classification 2",
             test_type=BehaviorType.directional,
             samples=["This is a test", "This is a 2nd test"],
@@ -67,6 +70,7 @@ class TestPerformer:
     def test_metrics_token_classification(self):
         """"""
         token_classification_behavior = TokenClassificationBehavior(
+            capability="Capability 1",
             name="Test token classification",
             test_type=BehaviorType.invariance,
             samples=["This is a test"],
@@ -75,6 +79,7 @@ class TestPerformer:
                                    Token(pos=3, label=0)], ]
         )
         token_classification_behavior2 = TokenClassificationBehavior(
+            capability="Capability 2",
             name="Test token classification 2",
             test_type=BehaviorType.directional,
             samples=["This is a test", "This is a 2nd test !"],

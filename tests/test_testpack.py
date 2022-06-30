@@ -9,6 +9,7 @@ from nlptest.types import BehaviorType
 @pytest.fixture
 def seq_classification_behavior():
     return SequenceClassificationBehavior(
+        capability="Capability 1",
         name="Test sequence classification",
         test_type=BehaviorType.invariance,
         samples=["TEST"],
@@ -20,6 +21,7 @@ def seq_classification_behavior():
 @pytest.fixture
 def seq_classification_behavior2():
     return SequenceClassificationBehavior(
+        capability="Capability 2",
         name="Test sequence classification 2",
         test_type=BehaviorType.invariance,
         samples=["TEST"],
