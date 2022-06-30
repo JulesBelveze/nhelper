@@ -75,20 +75,18 @@ class Behavior(object):
 class SequenceClassificationBehavior(Behavior):
     """"""
 
-    def __init__(self, name: str, test_type: BehaviorType, task_type: TaskType, samples: List[str],
-                 predict_fn: Callable, labels: Union[Union[str, int], List[Union[str, float]]],
-                 description: str = None):
+    def __init__(self, name: str, test_type: BehaviorType, samples: List[str], predict_fn: Callable,
+                 labels: Union[Union[str, int], List[Union[str, float]]], description: str = None):
         """
 
         :param name:
         :param test_type:
-        :param task_type:
         :param samples:
         :param predict_fn:
         :param labels:
         :param description:
         """
-        super().__init__(name, test_type, task_type, samples, predict_fn, labels, description)
+        super().__init__(name, test_type, TaskType.sequence_classification, samples, predict_fn, labels, description)
 
     @overrides
     def run(self) -> None:
@@ -120,19 +118,18 @@ class SequenceClassificationBehavior(Behavior):
 class MultiLabelSequenceClassificationBehavior(Behavior):
     """"""
 
-    def __init__(self, name: str, test_type: BehaviorType, task_type: TaskType, samples: List[str],
-                 predict_fn: Callable, labels: Union[List[int], List[List[int]]], description: str = None):
+    def __init__(self, name: str, test_type: BehaviorType, samples: List[str], predict_fn: Callable,
+                 labels: Union[List[int], List[List[int]]], description: str = None):
         """
 
         :param name:
         :param test_type:
-        :param task_type:
         :param samples:
         :param predict_fn:
         :param labels:
         :param description:
         """
-        super().__init__(name, test_type, task_type, samples, predict_fn, labels, description)
+        super().__init__(name, test_type, TaskType.sequence_classification, samples, predict_fn, labels, description)
 
     @overrides
     def run(self) -> None:
@@ -164,19 +161,18 @@ class MultiLabelSequenceClassificationBehavior(Behavior):
 class SpanClassificationBehavior(Behavior):
     """"""
 
-    def __init__(self, name: str, test_type: BehaviorType, task_type: TaskType, samples: List[str],
-                 predict_fn: Callable, labels: List[List[Optional[Span]]], description: str = None):
+    def __init__(self, name: str, test_type: BehaviorType, samples: List[str], predict_fn: Callable,
+                 labels: List[List[Optional[Span]]], description: str = None):
         """
 
         :param name:
         :param test_type:
-        :param task_type:
         :param samples:
         :param predict_fn:
         :param labels:
         :param description:
         """
-        super().__init__(name, test_type, task_type, samples, predict_fn, labels, description)
+        super().__init__(name, test_type, TaskType.span_classification, samples, predict_fn, labels, description)
 
     @overrides
     def run(self) -> None:
@@ -218,19 +214,18 @@ class SpanClassificationBehavior(Behavior):
 class TokenClassificationBehavior(Behavior):
     """"""
 
-    def __init__(self, name: str, test_type: BehaviorType, task_type: TaskType, samples: List[str],
-                 predict_fn: Callable, labels: List[Union[List[Token], List[int]]], description: str = None):
+    def __init__(self, name: str, test_type: BehaviorType, samples: List[str], predict_fn: Callable,
+                 labels: List[Union[List[Token], List[int]]], description: str = None):
         """
 
         :param name:
         :param test_type:
-        :param task_type:
         :param samples:
         :param predict_fn:
         :param labels:
         :param description:
         """
-        super().__init__(name, test_type, task_type, samples, predict_fn, labels, description)
+        super().__init__(name, test_type, TaskType.token_classification, samples, predict_fn, labels, description)
 
     @overrides
     def run(self) -> None:

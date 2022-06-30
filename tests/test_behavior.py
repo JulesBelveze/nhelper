@@ -5,7 +5,7 @@ import pytest
 
 from nlptest.behavior import SequenceClassificationBehavior, SpanClassificationBehavior, \
     MultiLabelSequenceClassificationBehavior, TokenClassificationBehavior
-from nlptest.types import BehaviorType, TaskType, Span, Token
+from nlptest.types import BehaviorType, Span, Token
 
 
 @pytest.fixture
@@ -35,7 +35,6 @@ class TestSequenceClassificationBehavior:
         behavior = SequenceClassificationBehavior(
             name="Test sequence classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.sequence_classification,
             samples=[text_sample] * n_samples,
             labels=[random_class] * n_samples,
             predict_fn=self.predict_fn
@@ -53,7 +52,6 @@ class TestSequenceClassificationBehavior:
         behavior = SequenceClassificationBehavior(
             name="Test sequence classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.sequence_classification,
             samples=[text_sample] * n_samples,
             labels=[random_class] * n_samples,
             predict_fn=self.predict_fn
@@ -86,7 +84,6 @@ class TestMultiLabelSequenceClassificationBehavior:
         behavior = MultiLabelSequenceClassificationBehavior(
             name="Test multi label sequence classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.sequence_classification,
             samples=[text_sample] * n_samples,
             labels=[[1, ] * self.n_labels] * n_samples,
             predict_fn=self.predict_fn
@@ -105,7 +102,6 @@ class TestMultiLabelSequenceClassificationBehavior:
         behavior = MultiLabelSequenceClassificationBehavior(
             name="Test multi label sequence classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.sequence_classification,
             samples=[text_sample] * n_samples,
             labels=[[1, ] * self.n_labels] * n_samples,
             predict_fn=self.predict_fn
@@ -136,7 +132,6 @@ class TestSpanClassificationBehavior:
         behavior = SpanClassificationBehavior(
             name="Test span classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.span_classification,
             samples=[text_sample] * n_samples,
             labels=[[random_span, ] * 4] * n_samples,
             predict_fn=self.predict_fn
@@ -154,7 +149,6 @@ class TestSpanClassificationBehavior:
         behavior = SpanClassificationBehavior(
             name="Test span classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.span_classification,
             samples=[text_sample] * n_samples,
             labels=[[random_span, ] * 4] * n_samples,
             predict_fn=self.predict_fn
@@ -193,7 +187,6 @@ class TestTokenClassificationBehavior:
         behavior = TokenClassificationBehavior(
             name="Test token classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.token_classification,
             samples=[text_sample] * n_samples,
             labels=labels,
             predict_fn=self.predict_fn
@@ -214,7 +207,6 @@ class TestTokenClassificationBehavior:
         behavior = TokenClassificationBehavior(
             name="Test token classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.token_classification,
             samples=[text_sample] * n_samples,
             labels=labels,
             predict_fn=self.predict_fn
