@@ -5,7 +5,7 @@ import pytest
 
 from nlptest.behavior import SequenceClassificationBehavior, SpanClassificationBehavior, \
     MultiLabelSequenceClassificationBehavior, TokenClassificationBehavior
-from nlptest.types import BehaviorType, TaskType, Span, Token
+from nlptest.types import BehaviorType, Span, Token
 
 
 @pytest.fixture
@@ -33,9 +33,9 @@ class TestSequenceClassificationBehavior:
     def test_run(self, text_sample, random_class):
         n_samples = 5
         behavior = SequenceClassificationBehavior(
+            capability="Capability 1",
             name="Test sequence classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.sequence_classification,
             samples=[text_sample] * n_samples,
             labels=[random_class] * n_samples,
             predict_fn=self.predict_fn
@@ -51,9 +51,9 @@ class TestSequenceClassificationBehavior:
         """"""
         n_samples = 5
         behavior = SequenceClassificationBehavior(
+            capability="Capability 2",
             name="Test sequence classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.sequence_classification,
             samples=[text_sample] * n_samples,
             labels=[random_class] * n_samples,
             predict_fn=self.predict_fn
@@ -84,9 +84,9 @@ class TestMultiLabelSequenceClassificationBehavior:
         n_samples = 5
 
         behavior = MultiLabelSequenceClassificationBehavior(
+            capability="Capability 1",
             name="Test multi label sequence classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.sequence_classification,
             samples=[text_sample] * n_samples,
             labels=[[1, ] * self.n_labels] * n_samples,
             predict_fn=self.predict_fn
@@ -103,9 +103,9 @@ class TestMultiLabelSequenceClassificationBehavior:
         n_samples = 5
 
         behavior = MultiLabelSequenceClassificationBehavior(
+            capability="Capability 2",
             name="Test multi label sequence classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.sequence_classification,
             samples=[text_sample] * n_samples,
             labels=[[1, ] * self.n_labels] * n_samples,
             predict_fn=self.predict_fn
@@ -134,9 +134,9 @@ class TestSpanClassificationBehavior:
     def test_run(self, text_sample, random_span):
         n_samples = 5
         behavior = SpanClassificationBehavior(
+            capability="Capability 1",
             name="Test span classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.span_classification,
             samples=[text_sample] * n_samples,
             labels=[[random_span, ] * 4] * n_samples,
             predict_fn=self.predict_fn
@@ -152,9 +152,9 @@ class TestSpanClassificationBehavior:
         """"""
         n_samples = 5
         behavior = SpanClassificationBehavior(
+            capability="Capability 2",
             name="Test span classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.span_classification,
             samples=[text_sample] * n_samples,
             labels=[[random_span, ] * 4] * n_samples,
             predict_fn=self.predict_fn
@@ -191,9 +191,9 @@ class TestTokenClassificationBehavior:
         labels = [[Token(pos=i, label=i % 3) for i in range(len(tokens))], ] * n_samples
 
         behavior = TokenClassificationBehavior(
+            capability="Capability 1",
             name="Test token classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.token_classification,
             samples=[text_sample] * n_samples,
             labels=labels,
             predict_fn=self.predict_fn
@@ -212,9 +212,9 @@ class TestTokenClassificationBehavior:
         labels = [[Token(pos=i, label=i % 3) for i in range(len(tokens))], ] * n_samples
 
         behavior = TokenClassificationBehavior(
+            capability="Capability 2",
             name="Test token classification",
             test_type=BehaviorType.invariance,
-            task_type=TaskType.token_classification,
             samples=[text_sample] * n_samples,
             labels=labels,
             predict_fn=self.predict_fn

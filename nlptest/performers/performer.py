@@ -20,6 +20,7 @@ class Performer(object):
 
         self.eps = 1e-8
         self._is_fitted = False
+        self.result = None
 
     def fit(self, behaviors: List[Behavior]) -> None:
         """"""
@@ -31,21 +32,33 @@ class Performer(object):
             [b.run() for b in behaviors]
 
         flatten_outputs = [output for behavior in behaviors for output in behavior.outputs]
-        total_acc = {"total": np.mean([out.success for out in flatten_outputs])}
+        total_acc = {"Total": np.mean([out.success for out in flatten_outputs])}
 
         # Retrieving accuracy per 'Behavior'
         per_name_acc = {
-            behavior.name: np.mean([output.success for output in behavior.outputs]) for behavior in behaviors
+            f"Name - {behavior.name}": np.mean([output.success for output in behavior.outputs])
+            for behavior in behaviors
         }
+
+        # Retrieving accuracy per 'Behavior.capability'
+        per_capability_acc = defaultdict(list)
+        for behavior in behaviors:
+            per_capability_acc[f"Capability - {behavior.capability}"].extend(
+                [output.success for output in behavior.outputs]
+            )
+        per_capability_acc = {key: np.mean(val) for key, val in per_capability_acc.items()}
 
         # Retrieving accuracy per 'BehaviorType'
         per_behavior_type_acc = defaultdict(list)
         for behavior in behaviors:
-            per_behavior_type_acc[behavior.test_type.value].extend([output.success for output in behavior.outputs])
+            per_behavior_type_acc[f"Behavior type - {behavior.test_type.value}"].extend(
+                [output.success for output in behavior.outputs]
+            )
 
         per_behavior_type_acc = {key: np.mean(value) for key, value in per_behavior_type_acc.items()}
 
-        self.result = reduce(lambda x, y: dict(x, **y), (total_acc, per_name_acc, per_behavior_type_acc))
+        self.result = reduce(lambda x, y: dict(x, **y),
+                             (total_acc, per_name_acc, per_behavior_type_acc, per_capability_acc))
         logging.info("'Performer' has been successfully fitted.")
         self._is_fitted = True
 
