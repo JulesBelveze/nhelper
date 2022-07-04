@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "NLPtest"
-version = "0.1.2"
+version = "0.1.3"
 description = "🧪 Behavioral tests for NLP models 🧪"
 authors = ["JulesBelveze <jules.belveze@hotmail.fr>"]
 
