@@ -28,12 +28,12 @@ class TestPerformer:
             metric_type="weighted"
         )
         performer.fit([seq_classification_behavior, seq_classification_behavior2])
-
-        assert performer.result[BehaviorType.directional.value] == \
-               performer.result["Test sequence classification 2"] == 0.5
-        assert performer.result[BehaviorType.invariance.value] == \
-               performer.result["Test sequence classification"] == 1.0
-        assert performer.result["total"] == 2 / 3
+        print(performer.result)
+        assert performer.result[f"Behavior type - {BehaviorType.directional.value}"] == \
+               performer.result[f"Name - {seq_classification_behavior2.name}"] == 0.5
+        assert performer.result[f"Behavior type - {BehaviorType.invariance.value}"] == \
+               performer.result[f"Name - {seq_classification_behavior.name}"] == 1.0
+        assert performer.result["Total"] == 2 / 3
 
     def test_metrics_span_classification(self):
         """"""
@@ -61,11 +61,11 @@ class TestPerformer:
         )
         performer.fit([span_classification_behavior, span_classification_behavior2])
 
-        assert performer.result[BehaviorType.directional.value] == \
-               performer.result["Test span classification 2"] == 0.0
-        assert performer.result[BehaviorType.invariance.value] == \
-               performer.result["Test span classification"] == 1.0
-        assert performer.result["total"] == 1 / 3
+        assert performer.result[f"Behavior type - {BehaviorType.directional.value}"] == \
+               performer.result[f"Name - {span_classification_behavior2.name}"] == 0.0
+        assert performer.result[f"Behavior type - {BehaviorType.invariance.value}"] == \
+               performer.result[f"Name - {span_classification_behavior.name}"] == 1.0
+        assert performer.result["Total"] == 1 / 3
 
     def test_metrics_token_classification(self):
         """"""
@@ -99,8 +99,8 @@ class TestPerformer:
         )
         performer.fit([token_classification_behavior, token_classification_behavior2])
 
-        assert performer.result[BehaviorType.directional.value] == \
-               performer.result["Test token classification 2"] == 0.5
-        assert performer.result[BehaviorType.invariance.value] == \
-               performer.result["Test token classification"] == 0
-        assert performer.result["total"] == 1 / 3
+        assert performer.result[f"Behavior type - {BehaviorType.directional.value}"] == \
+               performer.result[f"Name - {token_classification_behavior2.name}"] == 0.5
+        assert performer.result[f"Behavior type - {BehaviorType.invariance.value}"] == \
+               performer.result[f"Name - {token_classification_behavior.name}"] == 0
+        assert performer.result["Total"] == 1 / 3
