@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List, Union, Callable, Optional
 
 from nlptest.performers import PerformerType
-from .behavior import BehaviorSet, Behavior
+from nlptest.behavior import BehaviorSet, Behavior
 
 
 class TestPack(object):
