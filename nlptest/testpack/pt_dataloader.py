@@ -1,8 +1,10 @@
+import os.path
 from typing import List, Any, Callable, Optional
 
 from torch.utils.data import Dataset
 
 from nlptest.types import BehaviorType
+from nlptest.behavior import Behavior
 from .testpack import TestPack
 
 
@@ -60,4 +62,22 @@ class PyTorchTestPack(Dataset):
                 texts.append(sample)
                 all_labels.append(labels)
 
+        return cls(capabilities, names, test_types, texts, all_labels, processor)
+
+    @classmethod
+    def from_saved_behaviors(cls, folder_path: str, processor: Callable = None):
+        """"""
+        assert os.path.isdir(folder_path), "Please provide a path to a folder."
+
+        files = [os.path.join(folder_path, f) for f in os.listdir(folder_path) if f.endswith(".pkl")]
+
+        capabilities, names, test_types, texts, all_labels = [], [], [], [], []
+        for f in files:
+            behavior = Behavior.from_file(f)
+            for sample, labels in zip(behavior.samples, behavior.labels):
+                capabilities.append(behavior.capability)
+                names.append(behavior.name)
+                test_types.append(behavior.test_type.value)
+                texts.append(sample)
+                all_labels.append(labels)
         return cls(capabilities, names, test_types, texts, all_labels, processor)

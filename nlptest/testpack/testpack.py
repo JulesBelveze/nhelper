@@ -61,7 +61,8 @@ class TestPack(object):
             behavior.to_file(folder)
 
     @classmethod
-    def from_file(cls, folder: str, prediction_fns: Union[List[Callable], Callable], performer: PerformerType):
+    def from_file(cls, folder: str, prediction_fns: Union[List[Callable], Callable] = None,
+                  performer: PerformerType = None):
         """
         Loads a TestPack from a folder
 
