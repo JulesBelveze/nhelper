@@ -2,7 +2,7 @@ import pytest
 
 from nlptest.behavior import SequenceClassificationBehavior, DuplicateBehaviorError
 from nlptest.performers import Performer
-from nlptest.testpack import TestPack
+from nlptest.testpack import TestPack, PyTorchTestPack
 from nlptest.types import BehaviorType
 
 
@@ -76,3 +76,62 @@ class TestTestPack:
         outputs2 = testpack2.outputs
 
         assert outputs1 == outputs2
+
+
+class TestPyTorchTestPack:
+    """"""
+
+    @staticmethod
+    def identity(**kwargs):
+        return kwargs
+
+    def test_instantiation(self, seq_classification_behavior, seq_classification_behavior2):
+        """"""
+        testpack = PyTorchTestPack(
+            capabilities=[seq_classification_behavior.capability, seq_classification_behavior2.capability],
+            names=[seq_classification_behavior.name, seq_classification_behavior2.name],
+            test_types=[seq_classification_behavior.test_type, seq_classification_behavior2.test_type],
+            texts=seq_classification_behavior.samples + seq_classification_behavior2.samples,
+            labels=seq_classification_behavior.labels + seq_classification_behavior2.labels,
+            processor=self.identity
+        )
+
+        assert list(testpack[0].keys()) == ["capability", "name", "test_type", "text", "labels"]
+
+    def test_from_testpack(self, seq_classification_behavior):
+        """"""
+        pt_testpack = PyTorchTestPack(
+            capabilities=[seq_classification_behavior.capability],
+            names=[seq_classification_behavior.name],
+            test_types=[seq_classification_behavior.test_type],
+            texts=seq_classification_behavior.samples,
+            labels=seq_classification_behavior.labels,
+            processor=self.identity
+        )
+
+        testpack = TestPack()
+        testpack.add(seq_classification_behavior)
+
+        pt_testpack_from_testpack = PyTorchTestPack.from_testpack(testpack, self.identity)
+        assert sorted([elt for elt in pt_testpack_from_testpack], key=lambda d: d["name"]) == \
+               sorted([elt for elt in pt_testpack], key=lambda d: d["name"])
+
+    def test_from_behaviors(self, seq_classification_behavior, seq_classification_behavior2):
+        """"""
+        testpack = TestPack()
+        testpack.add([seq_classification_behavior, seq_classification_behavior2])
+        testpack.to_file("/tmp/test")
+
+        pt_testpack = PyTorchTestPack.from_saved_behaviors("/tmp/test", processor=self.identity)
+
+        pt_testpack2 = PyTorchTestPack(
+            capabilities=[seq_classification_behavior.capability, seq_classification_behavior2.capability],
+            names=[seq_classification_behavior.name, seq_classification_behavior2.name],
+            test_types=[seq_classification_behavior.test_type, seq_classification_behavior2.test_type],
+            texts=seq_classification_behavior.samples + seq_classification_behavior2.samples,
+            labels=seq_classification_behavior.labels + seq_classification_behavior2.labels,
+            processor=self.identity
+        )
+
+        assert sorted([elt for elt in pt_testpack2], key=lambda d: d["name"]) == \
+               sorted([elt for elt in pt_testpack], key=lambda d: d["name"])

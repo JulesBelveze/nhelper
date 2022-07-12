@@ -14,7 +14,7 @@ class Behavior(object):
     """Model's Behavior to be tested"""
 
     def __init__(self, capability: str, name: str, test_type: BehaviorType, task_type: TaskType, samples: List[str],
-                 predict_fn: Callable, labels: Any, description: str = None):
+                 labels: Any, predict_fn: Callable = None, description: str = None):
         """
         :param capability: capability to test
         :param name: behavior name (used for identification)
@@ -34,12 +34,20 @@ class Behavior(object):
         self.task_type = task_type
         self.description = description
 
-        self.predict_fn = predict_fn
+        self._predict_fn = predict_fn
         self.samples = samples
         self.labels = labels
 
         self._is_ran = False
         self.outputs = []
+
+    @property
+    def predict_fn(self):
+        return self._predict_fn
+
+    @predict_fn.setter
+    def predict_fn(self, value):
+        self._predict_fn = value
 
     def run(self) -> None:
         """"""
@@ -65,7 +73,7 @@ class Behavior(object):
             pickle.dump(self_copy, writer)
 
     @classmethod
-    def from_file(cls, path_to_file: str, predict_fn: Callable):
+    def from_file(cls, path_to_file: str, predict_fn: Callable = None):
         """Loads a Behavior from a pickle file"""
         with open(path_to_file, "rb") as reader:
             behavior = pickle.load(reader)
@@ -77,8 +85,9 @@ class Behavior(object):
 class SequenceClassificationBehavior(Behavior):
     """"""
 
-    def __init__(self, capability: str, name: str, test_type: BehaviorType, samples: List[str], predict_fn: Callable,
-                 labels: Union[Union[str, int], List[Union[str, float]]], description: str = None):
+    def __init__(self, capability: str, name: str, test_type: BehaviorType, samples: List[str],
+                 labels: Union[Union[str, int], List[Union[str, float]]], predict_fn: Callable = None,
+                 description: str = None):
         """
         :param capability:
         :param name:
@@ -88,7 +97,7 @@ class SequenceClassificationBehavior(Behavior):
         :param labels:
         :param description:
         """
-        super().__init__(capability, name, test_type, TaskType.sequence_classification, samples, predict_fn, labels,
+        super().__init__(capability, name, test_type, TaskType.sequence_classification, samples, labels, predict_fn,
                          description)
 
     @overrides
@@ -121,8 +130,8 @@ class SequenceClassificationBehavior(Behavior):
 class MultiLabelSequenceClassificationBehavior(Behavior):
     """"""
 
-    def __init__(self, capability: str, name: str, test_type: BehaviorType, samples: List[str], predict_fn: Callable,
-                 labels: Union[List[int], List[List[int]]], description: str = None):
+    def __init__(self, capability: str, name: str, test_type: BehaviorType, samples: List[str],
+                 labels: Union[List[int], List[List[int]]], predict_fn: Callable = None, description: str = None):
         """
         :param capability
         :param name:
@@ -132,7 +141,7 @@ class MultiLabelSequenceClassificationBehavior(Behavior):
         :param labels:
         :param description:
         """
-        super().__init__(capability, name, test_type, TaskType.sequence_classification, samples, predict_fn, labels,
+        super().__init__(capability, name, test_type, TaskType.sequence_classification, samples, labels, predict_fn,
                          description)
 
     @overrides
@@ -165,8 +174,8 @@ class MultiLabelSequenceClassificationBehavior(Behavior):
 class SpanClassificationBehavior(Behavior):
     """"""
 
-    def __init__(self, capability: str, name: str, test_type: BehaviorType, samples: List[str], predict_fn: Callable,
-                 labels: List[List[Optional[Span]]], description: str = None):
+    def __init__(self, capability: str, name: str, test_type: BehaviorType, samples: List[str],
+                 labels: List[List[Optional[Span]]], predict_fn: Callable = None, description: str = None):
         """
         :param capability:
         :param name:
@@ -176,7 +185,7 @@ class SpanClassificationBehavior(Behavior):
         :param labels:
         :param description:
         """
-        super().__init__(capability, name, test_type, TaskType.span_classification, samples, predict_fn, labels,
+        super().__init__(capability, name, test_type, TaskType.span_classification, samples, labels, predict_fn,
                          description)
 
     @overrides
@@ -219,8 +228,8 @@ class SpanClassificationBehavior(Behavior):
 class TokenClassificationBehavior(Behavior):
     """"""
 
-    def __init__(self, capability: str, name: str, test_type: BehaviorType, samples: List[str], predict_fn: Callable,
-                 labels: List[Union[List[Token], List[int]]], description: str = None):
+    def __init__(self, capability: str, name: str, test_type: BehaviorType, samples: List[str],
+                 labels: List[Union[List[Token], List[int]]], predict_fn: Callable = None, description: str = None):
         """
         :param capability:
         :param name:
@@ -230,7 +239,7 @@ class TokenClassificationBehavior(Behavior):
         :param labels:
         :param description:
         """
-        super().__init__(capability, name, test_type, TaskType.token_classification, samples, predict_fn, labels,
+        super().__init__(capability, name, test_type, TaskType.token_classification, samples, labels, predict_fn,
                          description)
 
     @overrides

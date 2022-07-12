@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List, Union, Callable, Optional
 
 from nlptest.performers import PerformerType
-from .behavior import BehaviorSet, Behavior
+from nlptest.behavior import BehaviorSet, Behavior
 
 
 class TestPack(object):
@@ -61,7 +61,8 @@ class TestPack(object):
             behavior.to_file(folder)
 
     @classmethod
-    def from_file(cls, folder: str, prediction_fns: Union[List[Callable], Callable], performer: PerformerType):
+    def from_file(cls, folder: str, prediction_fns: Union[List[Callable], Callable] = None,
+                  performer: PerformerType = None):
         """
         Loads a TestPack from a folder
 
