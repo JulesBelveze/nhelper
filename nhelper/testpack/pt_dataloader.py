@@ -1,10 +1,10 @@
 import os.path
-from typing import List, Any, Callable, Optional
+from typing import Any, Callable, List, Optional
 
 from torch.utils.data import Dataset
 
-from nlptest.types import BehaviorType
-from nlptest.behavior import Behavior
+from nhelper.behavior import Behavior
+from nhelper.types import BehaviorType
 from .testpack import TestPack
 
 

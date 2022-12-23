@@ -1,5 +1,6 @@
 import pytest
-from nlptest.generator import Generator
+
+from nhelper.generator import Generator
 
 
 @pytest.fixture()

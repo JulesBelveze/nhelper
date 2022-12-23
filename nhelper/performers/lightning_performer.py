@@ -1,6 +1,6 @@
 from collections import defaultdict
 from functools import reduce
-from typing import Optional, Any, Callable
+from typing import Any, Callable, Optional
 
 import numpy as np
 import pytorch_lightning as pl

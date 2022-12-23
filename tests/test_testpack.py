@@ -1,9 +1,9 @@
 import pytest
 
-from nlptest.behavior import SequenceClassificationBehavior, DuplicateBehaviorError
-from nlptest.performers import Performer
-from nlptest.testpack import TestPack, PyTorchTestPack
-from nlptest.types import BehaviorType
+from nhelper.behavior import DuplicateBehaviorError, SequenceClassificationBehavior
+from nhelper.performers import Performer
+from nhelper.testpack import PyTorchTestPack, TestPack
+from nhelper.types import BehaviorType
 
 
 @pytest.fixture

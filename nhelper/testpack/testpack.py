@@ -1,9 +1,9 @@
 import os
 from pathlib import Path
-from typing import List, Union, Callable, Optional
+from typing import Callable, List, Optional, Union
 
-from nlptest.performers import PerformerType
-from nlptest.behavior import BehaviorSet, Behavior
+from nhelper.behavior import Behavior, BehaviorSet
+from nhelper.performers import PerformerType
 
 
 class TestPack(object):

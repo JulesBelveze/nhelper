@@ -3,9 +3,9 @@ from typing import List
 
 import pytest
 
-from nlptest.behavior import SequenceClassificationBehavior, SpanClassificationBehavior, \
-    MultiLabelSequenceClassificationBehavior, TokenClassificationBehavior
-from nlptest.types import BehaviorType, Span, Token
+from nhelper.behavior import MultiLabelSequenceClassificationBehavior, SequenceClassificationBehavior, \
+    SpanClassificationBehavior, TokenClassificationBehavior
+from nhelper.types import BehaviorType, Span, Token
 
 
 @pytest.fixture

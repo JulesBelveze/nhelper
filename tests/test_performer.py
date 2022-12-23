@@ -1,6 +1,6 @@
-from nlptest.behavior import SequenceClassificationBehavior, SpanClassificationBehavior, TokenClassificationBehavior
-from nlptest.performers import Performer
-from nlptest.types import BehaviorType, Span, Token
+from nhelper.behavior import SequenceClassificationBehavior, SpanClassificationBehavior, TokenClassificationBehavior
+from nhelper.performers import Performer
+from nhelper.types import BehaviorType, Span, Token
 
 
 class TestPerformer:

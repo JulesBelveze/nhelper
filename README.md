@@ -1,8 +1,8 @@
-<img src="figures/NLPtest.png" width="50%" align="right"/>
+<img src="figures/NheLPer.png" width="50%" align="right"/>
 
-# NLPtest
+# NheLPer
 
-**NLPtest** is Python package designed to ease *behavioral testing* of Natural Language Processing models to identify
+**NheLPer** is Python package designed to ease *behavioral testing* of Natural Language Processing models to identify
 possible capability failures.
 
 ## 1. About the project
@@ -22,15 +22,16 @@ paper: [Beyond Accuracy: Behavioral Testing of NLP models with CheckList](https:
 
 ### 2.1. Installation
 
-You can directly install **NLPtest** using [pypi](https://pypi.org/project/nlptest/):
+You can directly install **NheLPer** using [pypi](https://pypi.org/project/nhelper/):
 
 ```
-pip3 install nlptest
+pip3 install nhelper
 ```
 
 ### 2.2. Usage
 
-To help you get the hang of the library we provide three different Notebooks to the user, accessible from the `examples/` folder:
+To help you get the hang of the library we provide three different Notebooks to the user, accessible from
+the `examples/` folder:
 
 1. `Samples_generation.ipynb`: shows you how to easily generate texts using the `Generator` object.
 2. `Please_Behave.ipynb`: getting familiar with the `Behavior` object.
