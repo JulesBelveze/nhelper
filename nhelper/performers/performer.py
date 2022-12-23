@@ -1,12 +1,12 @@
 import logging
 from collections import defaultdict
 from functools import reduce
-from typing import Union, List
+from typing import List
 
 import numpy as np
 from tabulate import tabulate
 
-from nlptest.behavior import Behavior
+from nhelper.behavior import Behavior
 
 
 class Performer(object):
