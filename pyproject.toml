@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "NLPtest"
-version = "0.1.4"
+name = "NheLPer"
+version = "0.1.0"
 description = "🧪 Behavioral tests for NLP models 🧪"
 authors = ["JulesBelveze <jules.belveze@hotmail.fr>"]
 
 license = "LICENSE"
-homepage = "https://github.com/JulesBelveze/nlptest"
-repository = "https://github.com/JulesBelveze/nlptest"
+homepage = "https://github.com/JulesBelveze/nhelper"
+repository = "https://github.com/JulesBelveze/nhelper"
 readme = "README.md"
 keywords = ["nlp", "behavioral testing", "test"]
 classifiers = [
@@ -28,7 +28,7 @@ tokenizers = "^0.11.1"
 pydantic = "<1.8.0"
 sentencepiece = ">=0.1.96"
 overrides = "^6.1.0"
-pytorch-lightning = {version = "^1.6.4", optional = true}
+pytorch-lightning = { version = "^1.6.4", optional = true }
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.1"
