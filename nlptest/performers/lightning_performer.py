@@ -9,8 +9,10 @@ from pytorch_lightning.utilities.types import STEP_OUTPUT
 
 class LightningPerformer(pl.Callback):
     def __init__(self, postprocessor: Optional[Callable] = None):
+        super(LightningPerformer, self).__init__()
         self.postprocessor = postprocessor
 
+        self.result = None
         self.all = []
         self.per_capability = defaultdict(list)
         self.per_name = defaultdict(list)
@@ -40,8 +42,8 @@ class LightningPerformer(pl.Callback):
         per_type_success = {
             f"Behavior type - {key}": [np.mean(val), f"{np.sum(val)}/{len(val)}"] for key, val in self.per_type.items()
         }
-        result = reduce(lambda x, y: dict(x, **y),
-                        (total_success, per_name_success, per_capability_success, per_type_success))
+        self.result = reduce(lambda x, y: dict(x, **y),
+                             (total_success, per_name_success, per_capability_success, per_type_success))
 
         for logger in trainer.loggers:
-            logger.log_hyperparams(result)
+            logger.log_hyperparams(self.result)
